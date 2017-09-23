@@ -1,0 +1,238 @@
+---
+title: "hw01-kexin-wan.rmd"
+author: "kexin wan"
+date: "2017/9/21"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+####**1. A bit of data processing**
+```{r eval = FALSE}
+install.packages(plyr)
+```
+
+```{r}
+load("data/nba2017-salary-points.RData")
+ls()
+
+#Create a new salary variable
+million_salary <- as.numeric(round(salary/1000000,2),nsmall <-2)
+million_salary
+
+#Create a new experience variable
+replace = replace(experience,experience=="R","0")
+experience_new <- as.integer(replace)
+experience_new
+
+#Create a new position variable
+position_new <- as.factor(position)
+position_new
+
+#Create more descriptive labels
+library(plyr)
+position_updated <- mapvalues(position_new,from=c("C","SF","PF","SG","PG"),to=c("center","small_fwd","power_fwd","shoot_guard","point_guard"))
+position_updated
+
+#The frequency of each position
+table(position_updated)
+```
+
+####**2. Scatterplot of Points and Salary**
+```{r}
+plot(points,million_salary,pch=19, col="orange",cex=0.5,xlab="NBA Points",ylab="Salary(in millions)",main="Scatter plot of points and salary")
+```
+
+####**A concise description of the pattern **
+There is a **positive linear relationship** existing between **points** and **salary**. That is, as the points for the player increases, his salary generally increases as well. However, there are still some **outliers** with high NBA points but relatively low salary.
+
+####**3. Correlation between points and salary**
+```{r}
+#number of individuals
+n <- length(points)
+n
+
+#mean of variable x
+x_average <- sum(points)/n
+x_average
+
+#mean of variable y
+y_average <- sum(million_salary)/n
+y_average
+
+#variance of x
+var_x <- sum((points-x_average)^2)/(n-1)
+var_x
+
+#variance of y
+var_y <-  sum((points-y_average)^2)/(n-1)
+var_y
+
+#standard deviation of x
+sd_x <-  sqrt(var_x)
+sd_x
+
+#standard deviation of y
+sd_y <-  sqrt(var_y)
+sd_y
+
+#covariance between x and y
+cov_x_y <-  sum((points-x_average)*(million_salary-y_average))/(n-1)
+cov_x_y
+
+#correlation between x and y
+cor_x_y <-  cov_x_y/(sd_x*sd_y)
+cor_x_y
+
+```
+
+####**4. Simple Linear Regression**
+```{r}
+# the slope term b1
+b1 <- cor_x_y*sd_y/sd_x
+b1
+#b0 the intercept
+b0 <- y_average-b1*x_average
+b0
+#the vector of predicted values
+y_hat <- b0+b1*(points)
+
+#A summary of y_hat
+summary(y_hat)
+
+
+```
+####Summary statistics of y_hat
+    * minimum is 6.134
+    * first quartile is 6.181
+    * median is 6.186
+    * mean is 6.199
+    * third quartile is 6.187
+    * maximum is 6.969
+
+#### Regression Equation
+The regression line is `y_hat = 1.509077+0.008557567*(points)`
+
+#### intepretation of b1
+The slope coefficient b1 tells the amount of change in salary(y) that can be expected to result from a unit increase in points(x)
+
+#### intepretation of b0
+The intercept term b0 tells the amount of expected mean salary for a player when his points is 0.
+
+#### predicted salary for players
+    * predicted salary for 0 points is 1.509077 million dollars
+    * predicted salary for 100 points is 2.364833 million dollars
+    * predicted salary for 500 points is 5.78786 million dollars
+    * predicted salary for 1000 points is 10.06664 million dollars
+    * predicted salary for 2000 points is 18.62421 million dollars
+
+#### **5. Plotting the regression line**
+```{r}
+plot(points,million_salary,main="Regression and Lowess line",xlab="Points",ylab="Salary(in millions)",col="gray",pch=19,abline(a=1.509077, b=0.008557567, lwd=1, col="purple"))
+lines(lowess(points,million_salary),col="red",lwd=3)
+text(x=c(2400,2500),y=c(20,25),labels=c("regression","lowess"),col=c("purple","red"))
+```  
+
+#### **6. Regression residuals and Coefficient of Determination R2
+```{r}
+#The vector of residuals
+e = million_salary - y_hat
+summary(e) 
+
+#The residual sum of squares
+RSS=sum(e^2)
+RSS
+
+#The total sum of square
+TSS=sum((million_salary-mean(million_salary))^2)
+TSS
+
+#The coefficient of determination
+R_2= 1-RSS/TSS
+R_2
+```
+
+#### **7. Exploring Position and Experience**
+```{r}
+#A scatterplot of Years_of_Experience and Salary
+plot(experience_new,million_salary,main="Scatterplot with lowess smooth",xlab="Years of Experience",ylab="Salary(in million)",col="black",pch=19)
+lines(lowess(experience_new,million_salary),col="orange",lwd=3)
+
+#3D scatterplot of Points,Experience, and Salary
+# install.packages("scatterplot3d")
+library(scatterplot3d)
+scatterplot3d<-scatterplot3d(points,experience_new,million_salary,color="orange", pch=19,main="3D Scatterplot",xlab="points",ylab="salary",zlab="experience")
+
+#A conditional boxplot of salary in terms of position
+boxplot(million_salary ~ position_new, xlab="Position",ylab="Salary(in millions)")
+```
+
+####Concise description of the plot
+    The scatterplot shows the relationship between years of experience and salary. From the scatterplot there is no apparent correlation between years of experience and salary. 
+    The 3D scatterplot shows the relationship between points and salary, points and experience, and salary and experience.
+    From the 3D boxplot we can see that the first quartile and median salary for each position is roughly the same. But the third quartile salary and the highest salary for each position is somewhat different.
+    
+    
+####Scatterplot comprehension
+    The scatterplot shows no linears pattern. Instead, in small range of years of experience the salary in this range also varies widely, showing a vertical line pattern at each range of years of experience. Therefore, from the scatterplot, the experience seem to be unrelated with salary.
+    
+####Boxplot comprehension
+    From the box plot the position seem to be related with salary sincet the third quartile and the highest salaries in each position is different (even though the median seems roughly the same).
+
+
+#### **Comments and Reflections**
+
+    * What things were hard, even though you saw them in class?
+      1. THe manipulation of the various plot, the specific parameters inside them always confuse me, I have to constantly serach for help() to understand what these parameters mean. 
+      2. The concept of vectorization.
+      
+    * What was easy even though we haven't done in class?
+      1. install packages
+      2. the various arithmetic operation
+      
+    * If this was the first time you were using git, how do you feel about it?
+      I don't feel quite familiar with using it and hope can make progress by practicing more.
+      
+    * If this was the first time using GitHub, how do you feel about it?
+      It's covenient.
+      
+    * Did you need help to complete the assignment? If so, what kind of help? who help you?
+      There's a lot of basic syntax I feel I have no idea about how to use and is not covered in the class/lab/tutorial. I search for help through google and but a textbook myself to study.
+      
+    * What was the most time consuming part?
+      I spent a lot of time figuring out how to use the function line and lowess. Usually it's the syntax, the various application of the function part that I am the most struggling with.
+     
+    * How much time did it take to complete the HW?
+      I would say about 4-5 hours.
+      
+    * Was there anything you don't understand? or fully grasped?
+      The syntax of lowess and line.
+    
+    * Was there anything frustrating in particular?
+      I have no previous experience in R and find that I have not much resources to look into when I get stucked with some particular function since it is not covered in the class.
+    
+    * Was there anything exciting? Something that you feel proud of?
+      I find it really exciting when I was able to make the scatterplot, the boxplot through programming.
+
