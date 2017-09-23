@@ -189,6 +189,19 @@ scatterplot3d<-scatterplot3d(points,experience_new,million_salary,color="orange"
 boxplot(million_salary ~ position_new, xlab="Position",ylab="Salary(in millions)")
 ```
 
+####Concise description of the plot
+    The scatterplot shows the relationship between years of experience and salary. From the scatterplot there is no apparent correlation between years of experience and salary. 
+    The 3D scatterplot shows the relationship between points and salary, points and experience, and salary and experience.
+    From the 3D boxplot we can see that the first quartile and median salary for each position is roughly the same. But the third quartile salary and the highest salary for each position is somewhat different.
+    
+    
+####Scatterplot comprehension
+    The scatterplot shows no linears pattern. Instead, in small range of years of experience the salary in this range also varies widely, showing a vertical line pattern at each range of years of experience. Therefore, from the scatterplot, the experience seem to be unrelated with salary.
+    
+####Boxplot comprehension
+    From the box plot the position seem to be related with salary sincet the third quartile and the highest salaries in each position is different (even though the median seems roughly the same).
+
+
 #### **Comments and Reflections**
 
     * What things were hard, even though you saw them in class?
