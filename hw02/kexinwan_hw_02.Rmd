@@ -73,11 +73,11 @@ new_dat3 <- mutate(new_dat2,EFF = (PTS + REB + AST +STL+BLK-Missed_FG-Missed_FT-
 new_dat3
 
 #Compute Summary Statistics for EFF
-summary <- summarise(new_dat3,Min=min(EFF),first_Qu=quantile(EFF,0.25),Median=median(EFF),Mean=mean(EFF),third_Qu=quantile(EFF,0.75),Max=max(EFF))
+summary <- summarise(new_dat3,Min=round(min(EFF),3),first_Qu=round(quantile(EFF,0.25),3),Median=round(median(EFF),3),Mean=round(mean(EFF),3),third_Qu=round(quantile(EFF,0.75),3),Max=round(max(EFF),3))
 summary
 
 #Histogram of Efficiency
-hist_efficiency <- hist(new_dat3$EFF,main="Histogram of Efficiency",xlim=c(0,30),ylim=c(0,150),xlab="EFF",ylab="Frequency",col="grey")
+hist_efficiency <- hist(new_dat3$EFF,main="Histogram of Efficiency",xlim=c(0,35),ylim=c(0,150),xlab="EFF",ylab="Frequency",col="grey")
 
 #Display several values of top-10 players by EFF in decreasing order
 arrange_dat <- slice(arrange(select(new_dat3,Player,Team,Salary,EFF),desc(EFF)),1:10)
@@ -95,7 +95,7 @@ correlation_order <- sort(correlation,decreasing = TRUE)
 correlation_order
 
 #Create a barchart with the correlations in decreasing order
-{barplot(correlation_order,space=0.5,main="Correlations between Player Stats and EFF",col=c("grey","grey","grey","grey","grey","coral","coral","coral"),names.arg = c("PTS","REB","STL","AST","BLK","Missed_FT","Missed_FG","TO"),cex.names=0.65)
+{barplot(correlation_order,space=0.5,main="Correlations between Player Stats and EFF",col=c("grey","grey","grey","grey","grey","coral","coral","coral"),names.arg = c("PTS","REB","STL","AST","BLK","Missed_FT","Missed_FG","TO"),cex.names=0.65,ylim=c(-1,1))
 abline(h=0)}
 ```
 
