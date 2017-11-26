@@ -7,6 +7,12 @@
 #    http://shiny.rstudio.com/
 #
 
+## Title: shinyapp
+## Descriptions: This shinyapp displays overall class scores and individual component score visually 
+## Inputs: scores
+## Output: tables, graphs and number that displays the overall score distribution or individual score component
+
+
 select_from <- c("HW1","HW2","HW3","HW4","HW5","HW6","HW7","HW8","HW9","QZ1","QZ2","QZ3","QZ4","Test1","Test2","Homework","Quiz","Lab","Overall")
 grade <- unique(sort(raw_scores$Grade))
 frequency <- table(raw_scores$Grade)
