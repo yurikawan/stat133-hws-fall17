@@ -1,3 +1,10 @@
+## Title: test
+## Descriptions: This script test the correctness of all the functions
+## Inputs: test
+## Output: correctness
+
+
+
 install.packages("testthat")
 library(testthat)
 
