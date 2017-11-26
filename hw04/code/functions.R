@@ -277,8 +277,7 @@ summary_stats <- function(the_vector,is.na=TRUE){
 print_stats <- function(lst_stats){
   lst_names <- names(lst_stats)
   for (i in 1:length(lst_stats)){
-    helper <- paste0(format(lst_names[i],width=9,justify="left"),": ", sprintf("%.4f",lst_stats[[i]]))
-    print(helper,quote=FALSE)
+    helper <- cat(paste0(format(lst_names[i],width=9,justify="left"),": ", sprintf("%.4f",lst_stats[[i]])),"\n")
   }
 }
 
