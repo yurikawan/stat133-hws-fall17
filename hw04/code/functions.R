@@ -1,3 +1,8 @@
+## Title: Functions
+## Descriptions: This script includes all the codes for the functions used to analyze the scores
+## Inputs: rawscores
+## Output: rawscores after the corresponding manipulations
+
 #Function_1
 # title: remove_missing()
 # description: takes a vector, returns the input vector without missing values
