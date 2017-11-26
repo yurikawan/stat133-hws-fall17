@@ -24,7 +24,7 @@ get_minimum <- function(the_vector, na.rm=FALSE){
     }
   }
   the_vector <- sort(the_vector)
-  return (the_vector[1])
+  return (round(the_vector[1],4))
 }
 
 
@@ -46,7 +46,7 @@ get_maximum <- function(the_vector, na.rm=FALSE){
     }
   }
   the_vector <- sort(the_vector,decreasing = TRUE)
-  return (the_vector[1])
+  return (round(the_vector[1],4))
 }
 
 #Function_4 
@@ -83,7 +83,7 @@ get_percentile10 <- function(the_vector,na.rm=FALSE){
       stop("non-numeric argument")
     }
   }
-  return (quantile(the_vector,probs=0.1,names=FALSE))
+  return (round(quantile(the_vector,probs=0.1,names=FALSE),4))
 }
 
 #Function_6
@@ -101,7 +101,7 @@ get_percentile90 <- function(the_vector,na.rm=FALSE){
       stop("non-numeric argument")
     }
   }
-  return (quantile(the_vector,probs=0.9,names=FALSE))
+  return (round(quantile(the_vector,probs=0.9,names=FALSE),4))
 }
 
 
@@ -129,7 +129,7 @@ get_median <- function(the_vector,na.rm=FALSE){
     num_1 <- vec_len/2
     num_2 <- num_1 + 1
     result <- (the_vector[num_1] + the_vector[num_2])/2
-    return (result)
+    return (round(result,4))
   }
   }
 
@@ -162,7 +162,7 @@ get_average <- function(the_vector,na.rm=FALSE){
   }
   vec_len <- length(the_vector)
   result <- sum/vec_len
-  return (result)
+  return (round(result,4))
 }
 
 
@@ -189,7 +189,7 @@ get_stdev <- function(the_vector,na.rm=FALSE){
     counter = counter + (i-ave)^2 
   }
   result <- sqrt(counter/(length(the_vector) - 1))
-  result
+  return (round(result,4))
 }
 
 
@@ -210,7 +210,7 @@ get_quartile1 <- function(the_vector,na.rm=FALSE){
       stop("non-numeric argument")
     }
   }
-  return (quantile(the_vector,probs=0.25,names=FALSE))
+  return (round(quantile(the_vector,probs=0.25,names=FALSE),4))
 }
 
 
@@ -230,7 +230,7 @@ get_quartile3 <- function(the_vector,na.rm=FALSE){
       stop("non-numeric argument")
     }
   }
-  return (quantile(the_vector,probs=0.75,names=FALSE))
+  return (round(quantile(the_vector,probs=0.75,names=FALSE),4))
 }
 
 
